@@ -1,0 +1,74 @@
+java code for food delivery management system:
+
+import java.util.*;
+
+public class FoodDeliverySystem {
+  // A map of all available menu items, with the item name as the key and the price as the value
+  private static Map<String, Double> menu = new HashMap<>();
+
+  // A list of all current orders, with the order ID as the key and the Order object as the value
+  private static Map<Integer, Order> orders = new HashMap<>();
+
+  public static void main(String[] args) {
+    // Populate the menu map with some initial data
+    menu.put("Pizza", 15.99);
+    menu.put("Hamburger", 7.99);
+    menu.put("Fries", 3.99);
+    menu.put("Soda", 1.99);
+
+    Scanner input = new Scanner(System.in);
+    while (true) {
+      System.out.println("1. Place order");
+      System.out.println("2. View order status");
+      System.out.println("3. Cancel order");
+      System.out.println("4. Exit");
+      System.out.print("Enter a choice: ");
+      int choice = input.nextInt();
+
+      if (choice == 1) {
+        placeOrder(input);
+      } else if (choice == 2) {
+        viewOrderStatus(input);
+      } else if (choice == 3) {
+        cancelOrder(input);
+      } else if (choice == 4) {
+        break;
+      } else {
+        System.out.println("Invalid choice.");
+      }
+    }
+  }
+
+  private static void placeOrder(Scanner input) {
+    System.out.println("Place order:");
+    System.out.println("Menu: " + menu);
+    System.out.print("Enter item name: ");
+    String itemName = input.next();
+    if (!menu.containsKey(itemName)) {
+      System.out.println("Invalid item name.");
+      return;
+    }
+    System.out.print("Enter quantity: ");
+    int quantity = input.nextInt();
+    System.out.print("Enter address: ");
+    input.nextLine(); // consume newline character
+    String address = input.nextLine();
+    double cost = menu.get(itemName) * quantity;
+    Order order = new Order(itemName, quantity, address, cost);
+    int orderId = orders.size() + 1;
+    orders.put(orderId, order);
+    System.out.println("Order placed successfully. Order ID: " + orderId);
+  }
+
+  private static void viewOrderStatus(Scanner input) {
+    System.out.print("Enter order ID: ");
+    int orderId = input.nextInt();
+    Order order = orders.get(orderId);
+    if (order == null) {
+      System.out.println("Invalid order ID.");
+      return;
+    }
+    System.out.println("Item: " + order.itemName);
+    System.out.println("Quantity: " + order.quantity);
+    System.out.println("Address: " + order.address);
+    System.out.println("Cost: " + order.cost);
